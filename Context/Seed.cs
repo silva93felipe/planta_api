@@ -22,8 +22,10 @@ namespace PlantaApi.Context
                 CREATE TABLE IF NOT EXISTS Planta (
                     Id int  NOT NULL AUTO_INCREMENT,
                     Nome varchar(50) not null,
-                    MinutosParaAguar int,
+                    StatusPlanta int,
+                    MinutosRegar int,
                     UrlImage varchar(255),
+                    DataUltimaRegagem datetime,
                     primary key (Id)
                 )");
 

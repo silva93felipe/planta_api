@@ -13,8 +13,8 @@ namespace PlantaApi.Repositories
         {
             using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
-                string sQuery = "INSERT INTO Planta (Nome, MinutosParaAguar, UrlImage)"
-                                + " VALUES(@Nome, @MinutosParaAguar, @UrlImage)";
+                string sQuery = "INSERT INTO Planta (Nome, StatusPlanta, MinutosRegar, UrlImage)"
+                                + " VALUES(@Nome, @StatusPlanta, @MinutosRegar, @UrlImage)";
                 dbConnection.Open();
                 dbConnection.Execute(sQuery, item);
             }
@@ -34,7 +34,9 @@ namespace PlantaApi.Repositories
             using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
                 string sQuery = "UPDATE planta SET Nome = @Nome,"
-                            + " MinutosParaAguar = @MinutosParaAguar" 
+                            + " MinutosRegar = @MinutosRegar, " 
+                            + " StatusPlanta = @StatusPlanta, "
+                            + " DataUltimaRegagem = @DataUltimaRegagem"
                             + " WHERE Id = @Id";
                 dbConnection.Open();
                 dbConnection.Query(sQuery, item);
@@ -48,6 +50,22 @@ namespace PlantaApi.Repositories
                             + " WHERE Id = @Id";
                 dbConnection.Open();
                 return dbConnection.Query<PlantaModel>(sQuery, new { Id = id }).FirstOrDefault();
+            }
+        }
+
+        public void Regar(int id, DateTime dataRegagem)
+        { 
+            var plantaDb = FindByID(id);
+
+            if (plantaDb != null) {
+                using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
+                {
+                    string sQuery = "UPDATE planta SET StatusPlanta = @StatusPlanta, "
+                                + " DataUltimaRegagem = @DataUltimaRegagem"
+                                + " WHERE Id = @Id";
+                    dbConnection.Open();
+                    dbConnection.Query(sQuery, new { StatusPlanta = 1, DataUltimaRegagem = dataRegagem, Id = id});
+                }
             }
         }
         public override IEnumerable<PlantaModel> FindAll()

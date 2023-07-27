@@ -10,6 +10,10 @@ app.MapGet("/planta", () => {
     return plantaRepository.FindAll().ToList();
 });
 
+app.MapPost("/planta/regar/{id}", (PlantaModel plantaModel) => {
+    plantaRepository.Regar(plantaModel.Id, plantaModel.DataUltimaRegagem);
+});
+
 app.MapGet("/planta/{id}", (int id) => {
     var result = plantaRepository.FindByID(id);
     if(result == null){

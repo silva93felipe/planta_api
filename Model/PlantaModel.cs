@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PlantaApi.Enum;
 
 namespace PlantaApi.Model
 {
@@ -9,7 +10,9 @@ namespace PlantaApi.Model
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        public int MinutosParaAguar {get; set; }
+        public StatusPlanta StatusPlanta { get; set; }
+        public int MinutosRegar {get; set; }
         public string UrlImage {get; set;}
+        public DateTime DataUltimaRegagem { get; set; }
     }
 }
