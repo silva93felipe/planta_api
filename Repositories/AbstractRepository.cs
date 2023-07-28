@@ -11,7 +11,7 @@ namespace PlantaApi.Repositories
         private string _connectionString;
         protected string ConnectionString => _connectionString;
         public AbstractRepository(IConfiguration configuration){
-            _connectionString = configuration.GetConnectionString("Dev");
+            _connectionString = configuration.GetConnectionString("Prod");
 
             Seed.CreateDb(configuration);
 
