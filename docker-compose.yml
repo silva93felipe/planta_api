@@ -9,6 +9,8 @@ services:
       MYSQL_DATABASE: planta
     ports:
       - 3333:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
     
   api:
     build: .
@@ -16,4 +18,9 @@ services:
     depends_on:
       - mysql
     ports:
-      - 5045:5000
+      - 5000:5000
+    environment:
+      ASPNETCORE_URLS: http://+:5000
+
+volumes:
+  mysql-data:

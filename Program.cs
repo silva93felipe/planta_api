@@ -1,8 +1,11 @@
+using planta_api.Context;
 using PlantaApi.Model;
 using PlantaApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 PlantaRepository plantaRepository = new PlantaRepository(builder.Configuration);
+
+
 
 var app = builder.Build();
 
@@ -34,5 +37,7 @@ app.MapPut("/planta/{id}", (int id, PlantaModel plantaModel) => {
 app.MapDelete("/planta/{id}", (int id) => {
     plantaRepository.Remove(id);
 });
+
+//WaitForDatabase.WaitFor(builder.Configuration);
 
 app.Run();

@@ -13,7 +13,7 @@ namespace PlantaApi.Repositories
 
         public override void Add(PlantaModel item)
         {
-            using (IDbConnection dbConnection = new SqliteConnection(ConnectionString))
+            using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
                 string sQuery = "INSERT INTO Planta (Nome, StatusPlanta, MinutosRegar, UrlImage)"
                                 + " VALUES(@Nome, @StatusPlanta, @MinutosRegar, @UrlImage)";
@@ -23,7 +23,7 @@ namespace PlantaApi.Repositories
         }
         public override void Remove(int id)
         {
-            using (IDbConnection dbConnection = new SqliteConnection(ConnectionString))
+            using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
                 string sQuery = "DELETE FROM Planta" 
                             + " WHERE Id = @Id";
@@ -33,7 +33,7 @@ namespace PlantaApi.Repositories
         }
         public override void Update(PlantaModel item)
         {
-            using (IDbConnection dbConnection = new SqliteConnection(ConnectionString))
+            using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
                 string sQuery = "UPDATE Planta SET Nome = @Nome,"
                             + " MinutosRegar = @MinutosRegar, " 
@@ -46,7 +46,7 @@ namespace PlantaApi.Repositories
         }
         public override PlantaModel FindByID(int id)
         { 
-            using (IDbConnection dbConnection = new SqliteConnection(ConnectionString))
+            using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
                 string sQuery = "SELECT * FROM Planta" 
                             + " WHERE Id = @Id";
@@ -60,7 +60,7 @@ namespace PlantaApi.Repositories
             var plantaDb = FindByID(id);
 
             if (plantaDb != null) {
-                using (IDbConnection dbConnection = new SqliteConnection(ConnectionString))
+                using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
                 {
                     string sQuery = "UPDATE Planta SET StatusPlanta = @StatusPlanta, "
                                 + " DataUltimaRegagem = @DataUltimaRegagem"
@@ -72,7 +72,7 @@ namespace PlantaApi.Repositories
         }
         public override IEnumerable<PlantaModel> FindAll()
         { 
-            using (IDbConnection dbConnection = new SqliteConnection(ConnectionString))
+            using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
                 dbConnection.Open();
                 return dbConnection.Query<PlantaModel>("SELECT * FROM Planta");
