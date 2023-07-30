@@ -5,8 +5,6 @@ using PlantaApi.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 PlantaRepository plantaRepository = new PlantaRepository(builder.Configuration);
 
-
-
 var app = builder.Build();
 
 app.MapGet("/planta", () => {
