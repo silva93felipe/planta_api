@@ -1,5 +1,5 @@
-using planta_api.Context;
-using PlantaApi.Model;
+using planta_api.DTO;
+using planta_api.Mapper;
 using PlantaApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,28 +8,39 @@ PlantaRepository plantaRepository = new PlantaRepository(builder.Configuration);
 var app = builder.Build();
 
 app.MapGet("/planta", () => {
-    return plantaRepository.FindAll().ToList();
+    List<PlantaRequest> plantasRequest = new List<PlantaRequest>();
+    var plantasModel  = plantaRepository.FindAll().ToList();
+    foreach (var pla in plantasModel)
+    {
+        plantasRequest.Add(PlantaRequestMapper.PlantaDto(pla));
+    }
+
+    return plantasRequest;
 });
 
-app.MapPost("/planta/regar/{id}", (PlantaModel plantaModel) => {
+app.MapPost("/planta/regar/{id}", (PlantaRequest plantaModel) => {
     plantaRepository.Regar(plantaModel.Id, plantaModel.DataUltimaRegagem);
 });
 
 app.MapGet("/planta/{id}", (int id) => {
     var result = plantaRepository.FindByID(id);
     if(result == null){
-        return Results.NotFound(new {message = "Não foi encontrado"});
+        return Results.NotFound(new {message = "Nenhuma planta encontrada."});
     };
 
-    return Results.Ok(plantaRepository.FindByID(id));
+    var planta = PlantaRequestMapper.PlantaDto(result);
+
+    return Results.Ok(planta);
 });
 
-app.MapPost("/planta", (PlantaModel plantaModel) => {
-    plantaRepository.Add(plantaModel);
+app.MapPost("/planta", (PlantaRequest plantaModel) => {
+    var planta = PlantaRequestMapper.PlantaDto(plantaModel);
+    plantaRepository.Add(planta);
 });
 
-app.MapPut("/planta/{id}", (int id, PlantaModel plantaModel) => {
-    plantaRepository.Update(plantaModel);
+app.MapPut("/planta/{id}", (int id, PlantaRequest plantaModel) => {
+     var planta = PlantaRequestMapper.PlantaDto(plantaModel);
+    plantaRepository.Update(planta);
 });
 
 app.MapDelete("/planta/{id}", (int id) => {

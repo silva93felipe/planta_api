@@ -2,8 +2,6 @@ using System.Data;
 using Dapper;
 using PlantaApi.Model;
 using MySql.Data.MySqlClient;
-using System.Data.SqlClient;
-using Microsoft.Data.Sqlite;
 
 namespace PlantaApi.Repositories
 {

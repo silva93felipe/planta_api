@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using Dapper;
 using MySql.Data.MySqlClient;
-using Microsoft.Data.Sqlite;
 
 namespace PlantaApi.Context
 {
