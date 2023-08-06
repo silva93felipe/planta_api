@@ -10,20 +10,42 @@ namespace PlantaApi.Context
 
         public static void CreateDb(IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("Dev");
+            var connectionString = String.Empty;
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"){
+            connectionString = configuration.GetConnectionString("Prod");
+           /*  }else if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production"){
+                connectionString = configuration.GetConnectionString("Prod");
+            } */
+
             _dbConnection = new MySqlConnection(connectionString);
             _dbConnection.Open();
 
             _dbConnection.Execute(@"
                 CREATE TABLE IF NOT EXISTS Planta (
-                    Id int  NOT NULL AUTO_INCREMENT,
-                    Nome varchar(50) not null,
-                    StatusPlanta int,
-                    MinutosRegar int,
-                    UrlImage varchar(255),
-                    DataUltimaRegagem datetime,
-                    primary key (Id)
-                )");
+                    Id INT  NOT NULL AUTO_INCREMENT,
+                    Ativo BOOLEAN,
+                    CreateAt DATETIME,
+                    UpdateAt DATETIME,
+                    Nome VARCHAR(50) NOT NULL,
+                    MinutosRegar INT,
+                    UrlImage VARCHAR(255),
+                    UltimaRegagem DATETIME,
+                    PRIMARY KEY (Id)
+                );
+                
+                CREATE TABLE IF NOT EXISTS Regagem (
+                    Id INT  NOT NULL AUTO_INCREMENT,
+                    Ativo BOOLEAN,
+                    CreateAt DATETIME,
+                    UpdateAt DATETIME,
+                    PlantaId INT NOT NULL,
+                    Data DATETIME,
+                    Observacao VARCHAR(50),
+                    PRIMARY KEY (Id),
+                    FOREIGN KEY (PlantaId) REFERENCES Planta(Id)
+                );
+                
+                ");
 
                  /*  CREATE TABLE IF NOT EXISTS Planta (
                     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

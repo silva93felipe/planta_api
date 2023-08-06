@@ -7,14 +7,15 @@ namespace PlantaApi.Repositories
 {
     public class PlantaRepository : AbstractRepository<PlantaModel>
     {
+       private readonly string DATA_ATUAL_FORMATADA = new DateTime().ToString("yyyy-MM-dd hh:mm:ss");
        public PlantaRepository(IConfiguration configuration): base(configuration) { }
 
         public override void Add(PlantaModel item)
         {
             using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
-                string sQuery = "INSERT INTO Planta (Nome, StatusPlanta, MinutosRegar, UrlImage)"
-                                + " VALUES(@Nome, @StatusPlanta, @MinutosRegar, @UrlImage)";
+                string sQuery = "INSERT INTO Planta (Nome, MinutosRegar, UrlImage)"
+                                + " VALUES(@Nome, @MinutosRegar, @UrlImage)";
                 dbConnection.Open();
                 dbConnection.Execute(sQuery, item);
             }
@@ -23,23 +24,36 @@ namespace PlantaApi.Repositories
         {
             using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
-                string sQuery = "DELETE FROM Planta" 
+                string sQuery = "UPDATE Planta SET Ativo = false, UpdateAt = @UpdateAt" 
                             + " WHERE Id = @Id";
                 dbConnection.Open();
-                dbConnection.Execute(sQuery, new { Id = id });
+                dbConnection.Execute(sQuery, new { Id = id, UpdateAt = DATA_ATUAL_FORMATADA });
             }
         }
         public override void Update(PlantaModel item)
         {
             using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
             {
+                item.UpdateAt = DateTime.Now;
                 string sQuery = "UPDATE Planta SET Nome = @Nome,"
                             + " MinutosRegar = @MinutosRegar, " 
-                            + " StatusPlanta = @StatusPlanta, "
-                            + " DataUltimaRegagem = @DataUltimaRegagem"
+                            + " UltimaRegagem = @UltimaRegagem, "
+                            + " UpdateAt = @UpdateAt, "
+                            + " Ativo = @Ativo"
                             + " WHERE Id = @Id";
                 dbConnection.Open();
                 dbConnection.Query(sQuery, item);
+            }
+        }
+
+        public void UpdateUltimgaRegagem(DateTime ultimaRegagem, int plantaId)
+        {
+            using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
+            {
+                string sQuery = "UPDATE Planta SET UltimaRegagem = @UltimaRegagem"
+                            + " WHERE Id = @Id";
+                dbConnection.Open();
+                dbConnection.Query(sQuery, new { Id = plantaId, UltimaRegagem = ultimaRegagem});
             }
         }
         public override PlantaModel FindByID(int id)
@@ -48,24 +62,9 @@ namespace PlantaApi.Repositories
             {
                 string sQuery = "SELECT * FROM Planta" 
                             + " WHERE Id = @Id";
+
                 dbConnection.Open();
                 return dbConnection.Query<PlantaModel>(sQuery, new { Id = id }).FirstOrDefault();
-            }
-        }
-
-        public void Regar(int id, DateTime dataRegagem)
-        { 
-            var plantaDb = FindByID(id);
-
-            if (plantaDb != null) {
-                using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
-                {
-                    string sQuery = "UPDATE Planta SET StatusPlanta = @StatusPlanta, "
-                                + " DataUltimaRegagem = @DataUltimaRegagem"
-                                + " WHERE Id = @Id";
-                    dbConnection.Open();
-                    dbConnection.Query(sQuery, new { StatusPlanta = 1, DataUltimaRegagem = dataRegagem, Id = id});
-                }
             }
         }
         public override IEnumerable<PlantaModel> FindAll()

@@ -3,30 +3,27 @@ using PlantaApi.Model;
 
 namespace planta_api.Mapper
 {
-    public class PlantaResponseMapper
+    public class PlantaMapper
     {
-         public static PlantaModel PlantaDto(PlantaResponse planta){
+        public static PlantaModel Mapper(PlantaRequest planta){
             PlantaModel plantaRequest = new PlantaModel ()
             {
-                Id = planta.Id,
                 Nome = planta.Nome,
                 MinutosRegar = planta.MinutosRegar,
-                StatusPlanta = planta.StatusPlanta,
-                DataUltimaRegagem = planta.DataUltimaRegagem,
+                UltimaRegagem = planta.UltimaRegagem,
                 UrlImage = planta.UrlImage,
             };
 
             return plantaRequest;
         }
 
-         public static PlantaResponse PlantaDto(PlantaModel planta){
+         public static PlantaResponse Mapper(PlantaModel planta){
             PlantaResponse plantaRequest = new PlantaResponse ()
             {
                 Id = planta.Id,
                 Nome = planta.Nome,
                 MinutosRegar = planta.MinutosRegar,
-                StatusPlanta = planta.StatusPlanta,
-                DataUltimaRegagem = planta.DataUltimaRegagem,
+                UltimaRegagem = planta.UltimaRegagem,
                 UrlImage = planta.UrlImage,
             };
 

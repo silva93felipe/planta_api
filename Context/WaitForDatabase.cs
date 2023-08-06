@@ -6,7 +6,7 @@ namespace planta_api.Context
     {
         public static void WaitFor(IConfiguration configuration)
         {
-             var connectionString = configuration.GetConnectionString("Dev");// Substitua pela sua string de conexão com o MySQL
+            var connectionString = configuration.GetConnectionString("Prod");// Substitua pela sua string de conexão com o MySQL
             int maxAttempts = 10;
             int attempt = 1;
             TimeSpan retryDelay = TimeSpan.FromSeconds(10);

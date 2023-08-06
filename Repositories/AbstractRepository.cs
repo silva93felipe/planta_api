@@ -7,7 +7,13 @@ namespace PlantaApi.Repositories
         private string _connectionString;
         protected string ConnectionString => _connectionString;
         public AbstractRepository(IConfiguration configuration){
-            _connectionString = configuration.GetConnectionString("Dev");
+
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"){
+                //_connectionString = configuration.GetConnectionString("Dev");
+            //}else if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production"){
+            //    
+            _connectionString = configuration.GetConnectionString("Prod");
+            //}
 
             Seed.CreateDb(configuration);
 
