@@ -1,12 +1,12 @@
 using planta_api.DTO;
-using PlantaApi.Model;
+using planta_api.Model;
 
 namespace planta_api.Mapper
 {
     public class PlantaMapper
     {
-        public static PlantaModel Mapper(PlantaRequest planta){
-            PlantaModel plantaRequest = new PlantaModel ()
+        public static Planta Mapper(PlantaRequest planta){
+            Planta plantaRequest = new Planta ()
             {
                 Nome = planta.Nome,
                 MinutosRegar = planta.MinutosRegar,
@@ -17,7 +17,7 @@ namespace planta_api.Mapper
             return plantaRequest;
         }
 
-         public static PlantaResponse Mapper(PlantaModel planta){
+         public static PlantaResponse Mapper(Planta planta){
             PlantaResponse plantaRequest = new PlantaResponse ()
             {
                 Id = planta.Id,

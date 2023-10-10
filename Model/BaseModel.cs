@@ -9,7 +9,7 @@ namespace planta_api.Model
     {
            public T Id { get; set; }
            public bool Ativo { get; set; }
-           public DateTime CreateAt { get; set; }
+           private DateTime CreateAt { get; set; }
            public DateTime UpdateAt { get; set; }
            public BaseModel()
            {

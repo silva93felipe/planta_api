@@ -1,9 +1,9 @@
 using planta_api.Model;
-using PlantaApi.Enum;
+using planta_api.Enum;
 
-namespace PlantaApi.Model
+namespace planta_api.Model
 {
-    public class PlantaModel : BaseModel<int>
+    public class Planta : BaseModel<int>
     {
         public string Nome { get; set; }
         public int MinutosRegar {get; set; }

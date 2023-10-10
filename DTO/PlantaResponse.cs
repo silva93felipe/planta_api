@@ -1,4 +1,4 @@
-using PlantaApi.Enum;
+using planta_api.Enum;
 
 namespace planta_api.DTO
 {

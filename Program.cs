@@ -1,22 +1,25 @@
+
 using planta_api.Context;
 using planta_api.DTO;
 using planta_api.Mapper;
 using planta_api.Repositories;
-using PlantaApi.Repositories;
+using planta_api.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
-PlantaRepository plantaRepository = new PlantaRepository(builder.Configuration);
-RegagemRepository regagemRepository = new RegagemRepository(builder.Configuration);
+builder.Services.AddScoped<IPlantaRepository, PlantaRepository>();
+builder.Services.AddScoped<IRegagemRepository, RegagemRepository>();
+
+//WaitForDatabase.WaitFor(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapGet("/planta", () => {
+app.MapGet("/planta", (IPlantaRepository _plantaRepository) => {
     List<PlantaResponse> plantasRequest = new List<PlantaResponse>();
-    return plantaRepository.FindAll().ToList().Select(p => PlantaMapper.Mapper(p));
+    return _plantaRepository.FindAll().ToList().Select(p => PlantaMapper.Mapper(p));
 });
 
-app.MapGet("/planta/{id}", (int id) => {
-    var result = plantaRepository.FindByID(id);
+app.MapGet("/planta/{id}", (IPlantaRepository _plantaRepository, int id) => {
+    var result = _plantaRepository.FindByID(id);
     if(result == null){
         return Results.NotFound(new {message = "Nenhuma planta encontrada."});
     };
@@ -24,22 +27,20 @@ app.MapGet("/planta/{id}", (int id) => {
     return Results.Ok(PlantaMapper.Mapper(result));
 });
 
-app.MapPost("/planta", (PlantaRequest plantaModel) => {
-    plantaRepository.Add(PlantaMapper.Mapper(plantaModel));
+app.MapPost("/planta", (IPlantaRepository _plantaRepository, PlantaRequest plantaModel) => {
+    _plantaRepository.Add(PlantaMapper.Mapper(plantaModel));
 });
 
-app.MapPut("/planta/{id}", (int id, PlantaRequest plantaModel) => {     
-    plantaRepository.Update(PlantaMapper.Mapper(plantaModel));
+app.MapPut("/planta/{id}", (IPlantaRepository _plantaRepository, int id, PlantaRequest plantaModel) => {     
+    _plantaRepository.Update(PlantaMapper.Mapper(plantaModel));
 });
 
-app.MapDelete("/planta/{id}", (int id) => {
-    plantaRepository.Remove(id);
+app.MapDelete("/planta/{id}", (IPlantaRepository _plantaRepository, int id) => {
+    _plantaRepository.Remove(id);
 });
 
-app.MapPost("/planta/regar/{id}", (PlantaRequest plantaModel) => {
-    regagemRepository.Regar(plantaModel.Id, plantaModel.UltimaRegagem);
+app.MapPost("/planta/regar/{id}", (IRegagemRepository _regagemRepository, int id, PlantaRequest plantaModel) => {
+    //_regagemRepository.Regar(id, plantaModel.UltimaRegagem);
 });
-
-WaitForDatabase.WaitFor(builder.Configuration);
 
 app.Run();

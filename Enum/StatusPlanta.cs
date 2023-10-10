@@ -1,4 +1,4 @@
-namespace PlantaApi.Enum
+namespace planta_api.Enum
 {
     public enum StatusPlanta
     {

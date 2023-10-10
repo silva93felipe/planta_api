@@ -2,17 +2,17 @@ using System.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
 
-namespace PlantaApi.Context
+namespace planta_api.Context
 {
     public class Seed
     {
         private static IDbConnection _dbConnection;
+        private static string connectionString;
 
         public static void CreateDb(IConfiguration configuration)
         {
-            var connectionString = String.Empty;
             //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development"){
-            connectionString = configuration.GetConnectionString("Prod");
+            connectionString = configuration.GetConnectionString("Container");
            /*  }else if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production"){
                 connectionString = configuration.GetConnectionString("Prod");
             } */

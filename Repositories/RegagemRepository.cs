@@ -6,28 +6,26 @@ using System.Threading.Tasks;
 using Dapper;
 using MySql.Data.MySqlClient;
 using planta_api.Model;
-using PlantaApi.Repositories;
+using planta_api.Repositories.Interfaces;
 
 namespace planta_api.Repositories
 {
-    public class RegagemRepository 
+    public class RegagemRepository : IRegagemRepository
     {
-        private string _connectionString;
-        protected string ConnectionString => _connectionString;
-        private readonly PlantaRepository _plantaRepository;
+        private readonly string _connectionString;
+        private readonly IPlantaRepository _plantaRepository;
         public RegagemRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("Prod");
-            _plantaRepository = new PlantaRepository(configuration);
+            _connectionString = configuration.GetConnectionString("Container");
         }
 
-        public void Regar(int plantaId, DateTime dataRegagem)
+        public void Add(int plantaId, DateTime dataRegagem)
         { 
             Regagem regar = new Regagem();
             regar.PlantaId = plantaId;
             regar.Data = dataRegagem;
 
-            using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
+            using (IDbConnection dbConnection = new MySqlConnection(_connectionString))
             {
                 string sQuery = "INSERT INTO Regagem (Data, PlantaId, Observacao)"
                             + " VALUES(@Data, @PlantaId, @Observacao)";
@@ -40,7 +38,7 @@ namespace planta_api.Repositories
 
          public IEnumerable<Regagem> GetAll()
         { 
-            using (IDbConnection dbConnection = new MySqlConnection(ConnectionString))
+            using (IDbConnection dbConnection = new MySqlConnection(_connectionString))
             {
                  dbConnection.Open();
                 return dbConnection.Query<Regagem>("SELECT * FROM Regagem");
